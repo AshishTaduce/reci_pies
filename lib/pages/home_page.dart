@@ -11,71 +11,75 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      primary: false,
-      physics: ClampingScrollPhysics(),
-      children: [
-        Gap().small,
-        ListTile(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-            child: Text(
-              "Hey Lisa",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: ListView(
+        primary: false,
+        physics: ClampingScrollPhysics(),
+        children: [
+          Gap().small,
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+              child: Text(
+                "Hey Lisa",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+            ),
+            isThreeLine: true,
+            subtitle: Text(
+              "Hope you're ready to cook",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            trailing: Container(
+              width: 48,
+              decoration: BoxDecoration(
+                  color: Colors.blue, borderRadius: BorderRadius.circular(8)),
             ),
           ),
-          isThreeLine: true,
-          subtitle: Text(
-            "Hope you're ready to cook",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
+          Gap().large,
+          Divider(
+            color: Colors.grey,
+          ),
+          //Below AppBar
+          Gap().medium,
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+              child: Text(
+                "New Recipes!",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+            ),
+            trailing: FaIcon(
+              FontAwesomeIcons.angleDoubleRight,
+              color: Colors.yellow,
+              size: 36,
             ),
           ),
-          trailing: Container(
-            width: 48,
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(8)),
-          ),
-        ),
-        Gap().large,
-        Divider(
-          color: Colors.grey,
-        ),
-        //Below AppBar
-        Gap().medium,
-        ListTile(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-            child: Text(
-              "New Recipes!",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          Gap().semiMedium,
+          Container(
+            height: 52,
+            margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+            child: ListView.separated(
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) =>
+                  FilterTab(index),
+              itemCount: 3,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (BuildContext context, int index) => SizedBox(
+                width: 12,
+              ),
             ),
           ),
-          trailing: FaIcon(
-            FontAwesomeIcons.angleDoubleRight,
-            color: Colors.yellow,
-            size: 36,
-          ),
-        ),
-        Gap().semiMedium,
-        Container(
-          height: 52,
-          margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
-          child: ListView.separated(
-            physics: ClampingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) => FilterTab(index),
-            itemCount: 3,
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
-              width: 12,
-            ),
-          ),
-        ),
-        Gap().semiMedium,
-        RecipeCard(),
-        RecipeCard(),
-      ],
+          Gap().semiMedium,
+          RecipeCard(),
+          RecipeCard(),
+        ],
+      ),
     );
   }
 }

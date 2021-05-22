@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:reci_pies/pages/home_page.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import '../pages/details_page.dart';
+import '../pages/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,17 +12,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          backgroundColor: Color(0xff323232),
-          scaffoldBackgroundColor: Color(0xff212121),
-          textTheme: GoogleFonts.poppinsTextTheme(
-            Theme.of(context).textTheme.apply(
-                  bodyColor: Colors.white,
-                  displayColor: Colors.white,
-                ),
-          ),
+      theme: ThemeData(
+        backgroundColor: Color(0xff323232),
+        scaffoldBackgroundColor: Color(0xff212121),
+        appBarTheme: AppBarTheme(
+            centerTitle: true,
+            backgroundColor: Color(0xff212121),
+            elevation: 0.0,
+            actionsIconTheme: IconThemeData(
+              color: Colors.white,
+            )),
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme.apply(
+                bodyColor: Colors.white,
+                displayColor: Colors.white,
+              ),
         ),
-        home: MainPage());
+      ),
+      home: MainPage(),
+    );
   }
 }
 
@@ -31,53 +40,53 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final PersistentTabController _controller =
-      PersistentTabController(initialIndex: 0);
-
+  final PageController _controller = PageController(
+    initialPage: 0,
+  );
+  int _activePage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PersistentTabView(
-        context,
+      body: PageView(
         controller: _controller,
-        screens: [
+        onPageChanged: (newPage) => {
+          setState(
+            () => _activePage = newPage,
+          ),
+        },
+        children: [
           HomePage(),
-          Container(),
+          DetailsPage(),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _activePage,
+        onTap: (newPage) => {
+          setState(
+            () => _activePage = newPage,
+          ),
+          _controller.animateToPage(
+            _activePage,
+            duration: Duration(
+              milliseconds: 300,
+            ),
+            curve: Curves.linear,
+          )
+        },
         items: [
-          PersistentBottomNavBarItem(
-            icon: Icon(
-              Icons.access_alarms,
+          BottomNavigationBarItem(
+            label: "A",
+            icon: FaIcon(
+              FontAwesomeIcons.cookie,
             ),
           ),
-          PersistentBottomNavBarItem(
-            icon: Icon(
-              Icons.access_alarms,
+          BottomNavigationBarItem(
+            label: "A",
+            icon: FaIcon(
+              FontAwesomeIcons.cookie,
             ),
           ),
         ],
-        confineInSafeArea: true,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        hideNavigationBarWhenKeyboardShows: true,
-        decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          adjustScreenBottomPaddingOnCurve: true,
-          colorBehindNavBar: Colors.black,
-        ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style12,
       ),
     );
   }
